@@ -1,0 +1,20 @@
+# Default ignored files
+/shelf/
+/workspace.xml
+# Rider ignored files
+/contentModel.xml
+/.idea.FilmLib.iml
+/modules.xml
+/projectSettingsUpdater.xml
+# Editor-based HTTP Client requests
+/httpRequests/
+# Datasource local storage ignored files
+/dataSources/
+/dataSources.local.xml
+# General
+.DS_Store
+.AppleDouble
+.LSOverride
+# .NET Core build folders
+bin/
+obj/

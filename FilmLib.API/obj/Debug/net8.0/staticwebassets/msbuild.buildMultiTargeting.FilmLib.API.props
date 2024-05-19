@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="../build/FilmLib.API.props" />
+</Project>
