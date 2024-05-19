@@ -1,0 +1,12 @@
+/Users/dimazanuda/RiderProjects/FilmLib/FilmLib.Infrastructure/bin/Debug/net8.0/FilmLib.Infrastructure.deps.json
+/Users/dimazanuda/RiderProjects/FilmLib/FilmLib.Infrastructure/bin/Debug/net8.0/FilmLib.Infrastructure.dll
+/Users/dimazanuda/RiderProjects/FilmLib/FilmLib.Infrastructure/bin/Debug/net8.0/FilmLib.Infrastructure.pdb
+/Users/dimazanuda/RiderProjects/FilmLib/FilmLib.Infrastructure/obj/Debug/net8.0/FilmLib.Infrastructure.csproj.AssemblyReference.cache
+/Users/dimazanuda/RiderProjects/FilmLib/FilmLib.Infrastructure/obj/Debug/net8.0/FilmLib.Infrastructure.GeneratedMSBuildEditorConfig.editorconfig
+/Users/dimazanuda/RiderProjects/FilmLib/FilmLib.Infrastructure/obj/Debug/net8.0/FilmLib.Infrastructure.AssemblyInfoInputs.cache
+/Users/dimazanuda/RiderProjects/FilmLib/FilmLib.Infrastructure/obj/Debug/net8.0/FilmLib.Infrastructure.AssemblyInfo.cs
+/Users/dimazanuda/RiderProjects/FilmLib/FilmLib.Infrastructure/obj/Debug/net8.0/FilmLib.Infrastructure.csproj.CoreCompileInputs.cache
+/Users/dimazanuda/RiderProjects/FilmLib/FilmLib.Infrastructure/obj/Debug/net8.0/FilmLib.Infrastructure.dll
+/Users/dimazanuda/RiderProjects/FilmLib/FilmLib.Infrastructure/obj/Debug/net8.0/refint/FilmLib.Infrastructure.dll
+/Users/dimazanuda/RiderProjects/FilmLib/FilmLib.Infrastructure/obj/Debug/net8.0/FilmLib.Infrastructure.pdb
+/Users/dimazanuda/RiderProjects/FilmLib/FilmLib.Infrastructure/obj/Debug/net8.0/ref/FilmLib.Infrastructure.dll
