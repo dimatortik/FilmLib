@@ -16,6 +16,7 @@ public class ActorConfiguration : IEntityTypeConfiguration<Actor>
             .HasMaxLength(Actor.MAX_ACTOR_DESCRIPTION_LENGTH);
         builder.Property(a => a.ActorImageLink)
             .IsRequired();
+        builder.ComplexProperty(a => a.Rating);
         builder.HasMany(a => a.Films)
             .WithMany(f => f.Actors);
     }

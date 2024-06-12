@@ -6,13 +6,12 @@ namespace FilmLib.Domain.Models;
 
 public class Genre
 {
-    public const int MAX_GENRE_DESCRIPTION_LENGTH = 500; 
+    public const int MAX_GENRE_DESCRIPTION_LENGTH = 1500; 
     public const int MAX_GENRE_TITLE_LENGTH = 20;
 
     private readonly List<Film> _films = new ();
-    private Genre(int id, string title, string description )
+    private Genre(string title, string description )
     {
-        Id = id;
         Title = title;
         Description = description;
     }
@@ -28,7 +27,7 @@ public class Genre
     public void AddFilm(Film film) => _films.Add(film);
     
 
-    public static Result<Genre> Create(int id, string title, string description, List<Film> films)
+    public static Result<Genre> Create(string title, string description)
     {
         if (string.IsNullOrWhiteSpace(description) || description.Length > MAX_GENRE_DESCRIPTION_LENGTH)
         {
@@ -39,12 +38,25 @@ public class Genre
         {
             return Result.Failure<Genre>(DomainException.EmptyOrOutOfRange("Title").Message);
         }
-
-        if (films.Count < 0 )
-        {
-            return Result.Failure<Genre>(DomainException.EmptyFilmList().Message);
-        }
-
-        return Result.Success<Genre>(new (id, title, description));
+        
+        return Result.Success<Genre>(new (title, description));
     }
+    
+    public Result Edit(string? title, string? description)
+    {
+        if (!string.IsNullOrWhiteSpace(description) && description.Length > MAX_GENRE_DESCRIPTION_LENGTH)
+        {
+            return Result.Failure(DomainException.EmptyOrOutOfRange("Description").Message);
+        }
+        
+        if (!string.IsNullOrWhiteSpace(title) && title.Length > MAX_GENRE_TITLE_LENGTH)
+        {
+            return Result.Failure(DomainException.EmptyOrOutOfRange("Title").Message);
+        }
+        
+        Title = title ?? Title;
+        Description = description ?? Description;
+        return Result.Success();
+    }
+    
 }

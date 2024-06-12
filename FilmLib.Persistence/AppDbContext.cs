@@ -1,9 +1,14 @@
 using FilmLib.Domain.Models;
+using FilmLib.Persistence.Configurations;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 
 namespace FilmLib.Persistence;
 
-public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(options)
+public class AppDbContext(
+    DbContextOptions<AppDbContext> options,
+    IOptions<AuthorizationOptions> auth
+    ) : DbContext(options)
 {
     public DbSet<Actor> Actors { get; set; }
     public DbSet<Film> Films { get; set; }
@@ -14,5 +19,6 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(AppDbContext).Assembly);
+        modelBuilder.ApplyConfiguration(new RolePermissionConfiguration(auth.Value));
     }
 }

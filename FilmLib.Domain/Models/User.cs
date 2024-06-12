@@ -1,5 +1,6 @@
 using CSharpFunctionalExtensions;
 using FilmLib.Domain.Exceptions;
+using FilmLib.Persistence;
 
 namespace FilmLib.Domain.Models;
 
@@ -19,6 +20,7 @@ public class User
     public string PasswordHash { get; private set;  }
 
     public string Username { get; private set; }
+    public ICollection<RoleEntity> Roles { get; set; } = [];
 
     public static Result<User> Create(string email, string passwordHash, string username)
     {
@@ -49,17 +51,6 @@ public class User
         return Result.Success(user);
     }
     
-    
-    public Result ChangeEmail(string newEmail)
-    {
-        if (string.IsNullOrWhiteSpace(newEmail) || newEmail.Length > MAX_EMAIL_LENGTH)
-        {
-            return Result.Failure(DomainException.EmptyOrOutOfRange("Email").Message);
-        }
-
-        Email = newEmail;
-        return Result.Success();
-    }
     public Result ChangeUsername(string newUsername)
     {
         if (string.IsNullOrWhiteSpace(newUsername) || newUsername.Length > MAX_USERNAME_LENGTH)
@@ -68,6 +59,17 @@ public class User
         }
 
         Username = newUsername;
+        return Result.Success();
+    }
+    
+    public Result ChangePassword(string newPasswordHash)
+    {
+        if (string.IsNullOrWhiteSpace(newPasswordHash))
+        {
+            return Result.Failure(DomainException.EmptyOrOutOfRange("Password").Message);
+        }
+
+        PasswordHash = newPasswordHash;
         return Result.Success();
     }
 }

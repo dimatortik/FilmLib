@@ -1,29 +1,53 @@
 using System.Reflection;
-using FilmLib.Application.FilmActions.Commands.CreateFilm;
+using FilmLib.API.Extensions;
+using FilmLib.Application.Films.Commands.Create;
 using FilmLib.Persistence;
-using MediatR;
+using Microsoft.AspNetCore.CookiePolicy;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+var services = builder.Services;
 
-builder.Services.AddDbContext<AppDbContext>(options =>
+services.AddEndpointsApiExplorer();
+services.AddSwaggerGen();
+
+services.AddDbContext<AppDbContext>(options =>
 {
     options.UseNpgsql(configuration.GetConnectionString("FilmDB"));
 });
 
-// register dbcontext to use in the application assembly
-// builder.Services.AddScoped<AppDbContext>(provider => provider.GetRequiredService<AppDbContext>());
+services.AddCloudStorage(configuration);
 
-builder.Services.AddMediatR(cfg =>
+services.AddDistributedMemoryCache();
+services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromDays(1);
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+});
+
+
+services.AddMediatR(cfg =>
 {
     cfg.RegisterServicesFromAssemblies(typeof(CreateFilmCommand).GetTypeInfo().Assembly, 
         typeof(Program).GetTypeInfo().Assembly);
 });
 
-builder.Services.AddControllers().AddApplicationPart(typeof(Program).Assembly);
+services.AddCors(options =>
+{
+    options.AddDefaultPolicy(policyBuilder =>
+    {
+        policyBuilder.AllowAnyOrigin()
+            .AllowAnyMethod()
+            .AllowAnyHeader();
+    });
+});
+
+services.AddCustomAuthentication(configuration);
+
+
+services.AddControllers().AddApplicationPart(typeof(Program).Assembly);
     
 var app = builder.Build();
 
@@ -38,10 +62,16 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
 app.UseCors();
+app.UseCookiePolicy(new CookiePolicyOptions
+{
+    MinimumSameSitePolicy = SameSiteMode.Strict,
+    HttpOnly = HttpOnlyPolicy.Always,
+    Secure = CookieSecurePolicy.Always
+});
+app.UseSession();
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
-
 
 
 
