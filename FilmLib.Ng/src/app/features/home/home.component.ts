@@ -7,7 +7,7 @@ import {MatTab, MatTabGroup} from "@angular/material/tabs";
 import {MovieCardComponent} from "../../shared/post-card-view/post-card-view.component";
 import {RouterLink} from "@angular/router";
 import {NgForOf, SlicePipe} from "@angular/common";
-import {SwiperOptions} from "swiper/types";
+import {SwiperOptions} from "";
 import {SwiperDirective} from "../../shared/directives/swiper.directive";
 import {MatIcon} from "@angular/material/icon";
 import { IMovie } from '../content/interfaces/movie.interface';
