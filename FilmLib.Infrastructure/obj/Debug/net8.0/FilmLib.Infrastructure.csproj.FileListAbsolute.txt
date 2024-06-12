@@ -10,3 +10,11 @@
 /Users/dimazanuda/RiderProjects/FilmLib/FilmLib.Infrastructure/obj/Debug/net8.0/refint/FilmLib.Infrastructure.dll
 /Users/dimazanuda/RiderProjects/FilmLib/FilmLib.Infrastructure/obj/Debug/net8.0/FilmLib.Infrastructure.pdb
 /Users/dimazanuda/RiderProjects/FilmLib/FilmLib.Infrastructure/obj/Debug/net8.0/ref/FilmLib.Infrastructure.dll
+/Users/dimazanuda/RiderProjects/FilmLib/FilmLib.Infrastructure/obj/Debug/net8.0/FilmLib.Infrastructure.sourcelink.json
+/Users/dimazanuda/RiderProjects/FilmLib/FilmLib.Infrastructure/bin/Debug/net8.0/FilmLib.Application.dll
+/Users/dimazanuda/RiderProjects/FilmLib/FilmLib.Infrastructure/bin/Debug/net8.0/FilmLib.Domain.dll
+/Users/dimazanuda/RiderProjects/FilmLib/FilmLib.Infrastructure/bin/Debug/net8.0/FilmLib.Persistence.dll
+/Users/dimazanuda/RiderProjects/FilmLib/FilmLib.Infrastructure/bin/Debug/net8.0/FilmLib.Application.pdb
+/Users/dimazanuda/RiderProjects/FilmLib/FilmLib.Infrastructure/bin/Debug/net8.0/FilmLib.Domain.pdb
+/Users/dimazanuda/RiderProjects/FilmLib/FilmLib.Infrastructure/bin/Debug/net8.0/FilmLib.Persistence.pdb
+/Users/dimazanuda/RiderProjects/FilmLib/FilmLib.Infrastructure/obj/Debug/net8.0/FilmLib..452F78B9.Up2Date

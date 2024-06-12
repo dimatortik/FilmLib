@@ -15,3 +15,4 @@
 /Users/dimazanuda/RiderProjects/FilmLib/FilmLib.Persistence/obj/Debug/net8.0/ref/FilmLib.Persistence.dll
 /Users/dimazanuda/RiderProjects/FilmLib/FilmLib.Persistence/bin/Debug/net8.0/FilmLib.Persistence.runtimeconfig.json
 /Users/dimazanuda/RiderProjects/FilmLib/FilmLib.Persistence/obj/Debug/net8.0/FilmLib.Persistence.genruntimeconfig.cache
+/Users/dimazanuda/RiderProjects/FilmLib/FilmLib.Persistence/obj/Debug/net8.0/FilmLib.Persistence.sourcelink.json

@@ -16,7 +16,12 @@ public class FilmConfiguration : IEntityTypeConfiguration<Film>
             .HasMaxLength(Film.MAX_FILM_DESCRIPTION_LENGTH);
         builder.Property(f => f.TitleImageLink)
             .HasMaxLength(Film.MAX_FILM_DESCRIPTION_LENGTH);
+        builder.Property(f => f.Year);
         builder.Property(f => f.FilmVideoLink);
+        builder.Property(f => f.Country);
+        builder.Property(f => f.Director);
+        builder.Property(f => f.Views);
+        builder.ComplexProperty(f => f.Rating);
         builder.HasMany(f => f.Actors)
             .WithMany(a => a.Films);
         builder.HasMany(f => f.Genres)

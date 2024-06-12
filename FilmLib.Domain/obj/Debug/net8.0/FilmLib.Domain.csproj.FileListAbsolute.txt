@@ -10,3 +10,4 @@
 /Users/dimazanuda/RiderProjects/FilmLib/FilmLib.Domain/obj/Debug/net8.0/refint/FilmLib.Domain.dll
 /Users/dimazanuda/RiderProjects/FilmLib/FilmLib.Domain/obj/Debug/net8.0/FilmLib.Domain.pdb
 /Users/dimazanuda/RiderProjects/FilmLib/FilmLib.Domain/obj/Debug/net8.0/ref/FilmLib.Domain.dll
+/Users/dimazanuda/RiderProjects/FilmLib/FilmLib.Domain/obj/Debug/net8.0/FilmLib.Domain.sourcelink.json
