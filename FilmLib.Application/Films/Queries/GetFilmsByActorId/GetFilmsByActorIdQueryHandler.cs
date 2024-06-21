@@ -29,6 +29,7 @@ public class GetFilmsByActorIdQueryHandler(AppDbContext context) : IQueryHandler
                 Year = f.Year,
                 Country = f.Country,
                 Director = f.Director,
+                FilmVideoLink = f.FilmVideoLink
             })
             .ToListAsync(cancellationToken);
         return Result.Success(responses);

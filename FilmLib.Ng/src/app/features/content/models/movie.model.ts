@@ -13,7 +13,7 @@ export class MovieModel implements IMovie {
     year: number;
     country: string;
     director: string;
-    videoLink: string;
+    filmVideoLink: string;
     actors: IActor[];
     genres: IGenre[];
 
@@ -28,7 +28,7 @@ export class MovieModel implements IMovie {
         this.year = data.year;
         this.country = data.country;
         this.director = data.director;
-        this.videoLink = data.videoLink;
+        this.filmVideoLink = data.filmVideoLink;
         this.actors = data.actors;
         this.genres = data.genres;
     }

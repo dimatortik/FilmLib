@@ -16,11 +16,6 @@ public class EditGenreCommandHandler(AppDbContext context) : ICommandHandler<Edi
         var editedGenre = genre.Edit(request.Title, request.Description);
         if (editedGenre.IsFailure)
             return Result.Failure(editedGenre.Error);
-        await context.Genres
-            .ExecuteUpdateAsync(setters => setters
-                .SetProperty(p => p.Title, p => request.Title)
-                .SetProperty(p => p.Description, p => request.Description), 
-                cancellationToken: cancellationToken);
         await context.SaveChangesAsync(cancellationToken);
         return Result.Success();
     }

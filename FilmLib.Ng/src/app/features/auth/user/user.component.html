@@ -1,0 +1,19 @@
+<mat-card>
+  <mat-progress-bar *ngIf="isLoading" mode="indeterminate"></mat-progress-bar>
+  <mat-card-title-group>
+    <mat-card-title>User Panel</mat-card-title>
+  </mat-card-title-group>
+  <mat-card-content>
+    <p><strong>Username:</strong> {{ userName }}</p>
+    <p><strong>Email:</strong> {{ email }}</p>
+    <p><strong>Role:</strong> {{ role }}</p>
+  </mat-card-content>
+  <mat-card-actions>
+    <button mat-raised-button (click)="openChangeUserNameDialog()">
+      Change Username
+    </button>
+    <button mat-raised-button (click)="openChangePasswordDialog()">
+      Change Password
+    </button>
+  </mat-card-actions>
+</mat-card>

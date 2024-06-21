@@ -9,7 +9,10 @@ public class CloudStorageService(IAmazonS3 s3Client) : ICloudStorageService
     private readonly string _bucketName = "film-lib-pet";
 
     public async Task<Result<string>> UploadFileAsync(IFormFile file, string keyName)
-    { 
+    {
+        if (file == null)
+            return Result.Success(string.Empty);
+        
         if (s3Client == null)
         {
             return Result.Failure<string>("s3Client is not initialized.");
@@ -20,7 +23,9 @@ public class CloudStorageService(IAmazonS3 s3Client) : ICloudStorageService
             return Result.Failure<string>("File with this name already exists.");
         }
 
-        var key = $"{keyName}.{file.ContentType.Split('/')[1]}";
+        var rawKey = $"{keyName}.{file.ContentType.Split('/')[1]}";
+        var key = rawKey
+            .Replace(" ", "%20");
         var filepath = file.ContentType.StartsWith("video/") ? "films" : "images";
         using var stream = new MemoryStream();
         await file.CopyToAsync(stream);
@@ -28,7 +33,7 @@ public class CloudStorageService(IAmazonS3 s3Client) : ICloudStorageService
         var putRequest = new PutObjectRequest
         {
             BucketName = _bucketName,
-            Key = $"{filepath}/{key}",
+            Key = $"{filepath}/{rawKey}",
             InputStream = stream,
             ContentType = file.ContentType,
             CannedACL = S3CannedACL.PublicRead
@@ -48,7 +53,7 @@ public class CloudStorageService(IAmazonS3 s3Client) : ICloudStorageService
         
         
         
-        return Result.Success($"https://{_bucketName}.fra1.digitaloceanspaces.com/${filepath}/{key}");
+        return Result.Success($"https://{_bucketName}.fra1.digitaloceanspaces.com/{filepath}/{key}");
     }
 
     public async Task<Result<string>> GetFileUrlAsync(string keyName)

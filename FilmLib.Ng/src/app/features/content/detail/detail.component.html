@@ -1,77 +1,223 @@
 <mat-progress-bar *ngIf="isLoading" mode="indeterminate"></mat-progress-bar>
 
 <main class="content">
-
-  <section class="content__main"
-           [style]="'background-image: url(' + 'https://image.tmdb.org/t/p/w1280' + content?.titleImageLink + ');'"
-  >
-
+  <section class="content__main">
     <div class="content__container">
-
       <div class="content__info container">
+        <img
+          *ngIf="!editMode"
+          src=""
+          data-src="{{ content?.titleImageLink }}"
+          data-loaded="true"
+          [alt]="content?.titleImageLink"
+          appImgMissingDirective
+        />
 
-           <img src="" data-src=""
-             data-srcset=" 1x,  2x"
-             srcset=" 1x,  2x"
-             data-loaded="true" [alt]="content?.titleImageLink" appImgMissingDirective>
+        <div class="content__data" [formGroup]="movieForm">
+          <h2 *ngIf="!editMode">{{ content?.title }}</h2>
 
-           <div class="content__data">
-
-            <h2>{{content?.title}}</h2>
+          <mat-form-field *ngIf="editMode">
+            <mat-label>Title</mat-label>
+            <input matInput formControlName="title" />
+          </mat-form-field>
 
           <h4>Overview</h4>
-          <p>{{content?.description}}</p>
+          <p *ngIf="!editMode">{{ content?.description }}</p>
 
-          <button *ngIf="content?.videoLink" mat-flat-button color="primary" aria-label="Trailer" (click)="openDialog()" class="play-trailer">
-            <mat-icon aria-hidden="false" fontIcon="play_arrow"></mat-icon> Play Trailer
-          </button>
+          <mat-form-field *ngIf="editMode">
+            <mat-label>Overview</mat-label>
+            <textarea matInput formControlName="description"></textarea>
+          </mat-form-field>
+
+          <h4>Details</h4>
+          <p *ngIf="!editMode">Year: {{ content?.year }}</p>
+
+          <mat-form-field *ngIf="editMode">
+            <mat-label>Year</mat-label>
+            <input matInput formControlName="year" />
+          </mat-form-field>
+
+          <p *ngIf="!editMode">Director: {{ content?.director }}</p>
+
+          <mat-form-field *ngIf="editMode">
+            <mat-label>Director</mat-label>
+            <input matInput formControlName="director" />
+          </mat-form-field>
+
+          <p *ngIf="!editMode">Country: {{ content?.country }}</p>
+
+          <mat-form-field *ngIf="editMode">
+            <mat-label>Country</mat-label>
+            <input matInput formControlName="country" />
+          </mat-form-field>
 
           <h4>Categories</h4>
 
-          <div class="content__data--categories">
-            <button *ngFor="let genre of content?.genres" mat-raised-button color="primary" aria-label="Genres" disabled>{{genre.name}}</button>
+          <div *ngIf="!editMode" class="content__data--categories">
+            <button
+              *ngFor="let genre of genres"
+              mat-raised-button
+              color="primary"
+              class="btn-category"
+              aria-label="Genres"
+              [routerLink]="['/genre', genre.id]"
+            >
+              {{ genre.title }}
+            </button>
           </div>
 
+          <div *ngIf="editMode">
+            <div>
+              <mat-form-field>
+                <mat-label>Genres</mat-label>
+                <mat-select formControlName="genres" multiple>
+                  <mat-select-trigger>
+                    {{ genreNames }}
+                  </mat-select-trigger>
+                  <ngx-mat-select-search
+                    [formControl]="genreSearchCtrl"
+                  ></ngx-mat-select-search>
+                  <mat-option
+                    *ngFor="let genre of filteredGenres | async"
+                    [value]="genre"
+                  >
+                    {{ genre.title }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+              <button
+                mat-raised-button
+                color="primary"
+                (click)="openAddGenreDialog()"
+              >
+                Add new genre
+              </button>
+            </div>
+          </div>
         </div>
-
       </div>
-
     </div>
-
   </section>
 
-  <!-- Mobile data  -->
-  <section class="content__data-mobile">
-    <h2>{{content?.title}} </h2>
+  <section class="content__cast">
+    <h2>Cast</h2>
+    <div *ngIf="!editMode">
+      <div class="content__cast--cards">
+        <div class="cast-card" *ngFor="let actor of actors">
+          <app-poster-card [model]="actor" [isMovie]="false"></app-poster-card>
+        </div>
+      </div>
+    </div>
 
+    <div *ngIf="editMode">
+      <div class="cast-container">
+        <mat-form-field>
+          <mat-label>Cast</mat-label>
+          <mat-select formControlName="actors" multiple>
+            <mat-select-trigger>
+              {{ actorNames }}
+            </mat-select-trigger>
+            <ngx-mat-select-search
+              [formControl]="actorSearchCtrl"
+            ></ngx-mat-select-search>
+            <mat-option
+              *ngFor="let actor of filteredActors | async"
+              [value]="actor"
+            >
+              {{ actor.name }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <button
+          mat-raised-button
+          color="primary"
+          (click)="openAddActorDialog()"
+        >
+          Add new actor
+        </button>
+      </div>
+    </div>
+  </section>
 
-    <h4>Overview</h4>
-    <p>{{content?.description}}</p>
+  <section class="video-section">
+    <div class="video-player" *ngIf="content?.filmVideoLink && !editMode">
+      <video controls>
+        <source [src]="content?.filmVideoLink" type="video/mp4" />
+        Your browser does not support the video tag.
+      </video>
+    </div>
 
-    <button *ngIf="content?.videoLink" mat-flat-button color="primary" aria-label="Trailer" (click)="openDialog()" class="play-trailer">
-      <mat-icon aria-hidden="false" fontIcon="play_arrow"></mat-icon> Play Trailer
+    <div *ngIf="editMode" class="file-input">
+      <label>Movie video</label>
+      <input type="file" (change)="onMovieFileChange($event)" />
+    </div>
+
+    <div *ngIf="editMode">
+      <label>Movie poster</label>
+      <input type="file" (change)="onPosterFileChange($event)" />
+    </div>
+  </section>
+
+  <div class="admin-options">
+    <button
+      class="btn-update"
+      *ngIf="isAdmin && !editMode"
+      mat-raised-button
+      (click)="toggleEditMode()"
+    >
+      Update
     </button>
-  </section>
-
-</main>
-
-<!--Dialogo video trailer-->
-<ng-template #matTrailerDialog>
-  <div cdkDragBoundary=".cdk-overlay-container" cdkDrag cdkDragRootElement=".cdk-overlay-pane" style="background: black;">
-    <div class="dialog-title-container" cdkDragHandle>
-      <a href="javascript:void(0);" (click)="trailerDialog.closeAll()">
-        <mat-icon aria-label="cerrar dialogo cambiar imagen Cabecera">close</mat-icon>
-      </a>
-      <h2 matDialogTitle>Play Trailer</h2>
-    </div>
-
-    <mat-dialog-content class="header-content-dialog">
-
-      <div *ngIf="content?.videoLink" class="video-movie-main">
-        <iframe [src]="content?.videoLink" allowfullscreen></iframe>
-      </div>
-
-    </mat-dialog-content>
-
+    <button
+      class="btn-submit"
+      *ngIf="isAdmin && editMode"
+      mat-raised-button
+      (click)="onSubmit()"
+    >
+      Submit
+    </button>
+    <button
+      *ngIf="isAdmin && editMode"
+      mat-raised-button
+      color="warn"
+      (click)="toggleEditMode()"
+    >
+      Cancel
+    </button>
+    <button
+      *ngIf="isAdmin && !editMode"
+      mat-raised-button
+      color="warn"
+      (click)="deleteMovie()"
+    >
+      Delete
+    </button>
   </div>
-</ng-template>
+
+  <section *ngIf="!editMode" class="content__comments">
+    <h2>Comments</h2>
+    <form class="comment-form">
+      <mat-form-field>
+        <input
+          matInput
+          type="text"
+          placeholder="Enter your comment"
+          [formControl]="newCommentBody"
+        />
+      </mat-form-field>
+      <button mat-raised-button color="primary" (click)="addComment()">
+        Add Comment
+      </button>
+    </form>
+    <div class="content__comments--cards">
+      <mat-card *ngFor="let comment of comments" class="comment-card">
+        <mat-card-header>
+          <mat-card-title>{{ comment.userName }}</mat-card-title>
+          <mat-card-subtitle>{{ comment.createdAt }}</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+          {{ comment.body }}
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </section>
+</main>

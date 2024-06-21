@@ -1,21 +1,9 @@
-import {RouterModule, Routes} from '@angular/router';
-import {NgModule} from '@angular/core';
-import {PeopleComponent} from './people.component';
-import {PersonComponent} from './person/person.component';
+import { Route } from '@angular/router';
+import { PersonComponent } from './person/person.component';
 
-const personRoutes: Routes = [
-  {path: '',
-    children: [
-      { path: '', component: PeopleComponent},
-      { path: 'person/:id', component: PersonComponent},
-    ]},
+export const ACTOR_ROUTES: Route[] = [
+  {
+    path: '',
+    children: [{ path: ':url', component: PersonComponent }],
+  },
 ];
-
-@NgModule({
-  imports: [
-    RouterModule.forChild(personRoutes)
-  ],
-  exports: [RouterModule]
-})
-
-export class PeopleRoutesModule {}

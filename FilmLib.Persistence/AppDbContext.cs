@@ -15,6 +15,10 @@ public class AppDbContext(
     public DbSet<User> Users { get; set; }
     public DbSet<Genre> Genres { get; set; }
     public DbSet<FilmComment> Comments { get; set; }
+    
+    public DbSet<RoleEntity> Roles { get; set; }
+    
+    public DbSet<PermissionEntity> Permissions { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

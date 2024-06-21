@@ -26,6 +26,7 @@ public class GetFilmByIdQueryHandler(AppDbContext context) : IQueryHandler<GetFi
             Year = film.Year,
             Country = film.Country,
             Director = film.Director,
+            FilmVideoLink = film.FilmVideoLink
         };
         
         return Result.Success(response);

@@ -1,0 +1,71 @@
+<mat-progress-bar *ngIf="isLoading" mode="indeterminate"></mat-progress-bar>
+
+<main class="content">
+  <section class="content__main">
+    <div class="content__container">
+      <div class="content__info container">
+        <div class="content__data" [formGroup]="genreForm">
+          <h2 *ngIf="!editMode">{{ content?.title }}</h2>
+
+          <mat-form-field *ngIf="editMode">
+            <mat-label>Title</mat-label>
+            <input matInput formControlName="title" />
+          </mat-form-field>
+
+          <h4>Overview</h4>
+
+          <p *ngIf="!editMode">{{ content?.description }}</p>
+
+          <mat-form-field *ngIf="editMode">
+            <mat-label>Overview</mat-label>
+            <textarea matInput formControlName="description"></textarea>
+          </mat-form-field>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="admin-options">
+    <button
+      class="btn-update"
+      *ngIf="isAdmin && !editMode"
+      mat-raised-button
+      (click)="toggleEditMode()"
+    >
+      Update
+    </button>
+    <button
+      class="btn-submit"
+      *ngIf="isAdmin && editMode"
+      mat-raised-button
+      (click)="onSubmit()"
+    >
+      Submit
+    </button>
+    <button
+      *ngIf="isAdmin && editMode"
+      mat-raised-button
+      color="warn"
+      (click)="toggleEditMode()"
+    >
+      Cancel
+    </button>
+    <button
+      *ngIf="isAdmin && !editMode"
+      mat-raised-button
+      color="warn"
+      (click)="deleteGenre()"
+    >
+      Delete
+    </button>
+  </div>
+
+  <section *ngIf="!editMode" class="content__film">
+    <h2>Movies</h2>
+    <div class="content__film--cards">
+      <div class="film-card" *ngFor="let movie of movies">
+        <app-poster-card [model]="movie" [isMovie]="true"></app-poster-card>
+      </div>
+    </div>
+  </section>
+</main>

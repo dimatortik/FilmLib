@@ -23,11 +23,13 @@ public class JwtProvider(IOptions<JwtSettings> jwtSettings) : IJwtProvider
             {
                 new Claim(ClaimTypes.Sid, user.Id.ToString()),
                 new Claim(ClaimTypes.Role, user.Roles.First().Name),
+                new Claim(ClaimTypes.Email, user.Email),
+                new Claim(ClaimTypes.Name, user.Username)
             }),
             Issuer = _jwtSettings.Issuer,
             Audience = _jwtSettings.Audience,
             NotBefore = DateTime.UtcNow,
-            Expires = DateTime.UtcNow.AddHours(_jwtSettings.ExpiryInHours),
+            Expires = DateTime.UtcNow.AddHours(90),
             SigningCredentials = new SigningCredentials(
                 new SymmetricSecurityKey(key), 
                 SecurityAlgorithms.HmacSha256Signature)

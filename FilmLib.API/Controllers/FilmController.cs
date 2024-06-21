@@ -1,4 +1,5 @@
 using FilmLib.API.Contracts.Film;
+using FilmLib.Application.Auth;
 using FilmLib.Application.Films.Commands.AddVote;
 using FilmLib.Application.Films.Commands.Create;
 using FilmLib.Application.Films.Commands.Delete;
@@ -6,6 +7,7 @@ using FilmLib.Application.Films.Commands.Update;
 using FilmLib.Application.Films.Queries.GetAll;
 using FilmLib.Application.Films.Queries.GetById;
 using FilmLib.Application.Films.Queries.GetFilmsByActorId;
+using FilmLib.Application.Films.Queries.GetFilmsByGenreId;
 using FilmLib.Infrastructure.Auth;
 using FilmLib.Infrastructure.CloudStorage;
 using MediatR;
@@ -15,7 +17,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace FilmLib.API.Controllers;
 
 [ApiController]
-public class FilmController(IMediator sender, ICloudStorageService storageService) : ControllerBase
+public class FilmController(IMediator sender, ICloudStorageService storageService, AuthService authService) : ControllerBase
 {
     [Route("api/film")]
     [HttpPost]
@@ -47,7 +49,7 @@ public class FilmController(IMediator sender, ICloudStorageService storageServic
         return result.IsSuccess ? Ok() : BadRequest(result.Error);
     }
 
-    [Route("api/film/{Id}")]
+    [Route("api/film/{id}")]
     [HttpPut]
     [Authorize(Policy = nameof(Policy.AdminPolicy))]
     public async Task<IActionResult> UpdateFilm(
@@ -55,24 +57,27 @@ public class FilmController(IMediator sender, ICloudStorageService storageServic
         [FromRoute] Guid id,
         CancellationToken cancellationToken)
     {
-        var titleImageLink = await storageService.UploadFileAsync(request.TitleImage, request.Title);
-        if (titleImageLink.IsFailure)
-            return BadRequest(titleImageLink.Error);
+        // var titleImageLink = "";
+        // var filmVideoLink = "";
+        
+            var titleImageLinkResult = await storageService.UploadFileAsync(request.TitleImage, request.Title);
+            if (titleImageLinkResult.IsFailure)
+                return BadRequest(titleImageLinkResult.Error);
 
-        var filmVideoLink = await storageService.UploadFileAsync(request.FilmVideo, request.Title);
-        if (filmVideoLink.IsFailure)
-            return BadRequest(filmVideoLink.Error);
-
+            var filmVideoLinkResult = await storageService.UploadFileAsync(request.FilmVideo, request.Title);
+            if (filmVideoLinkResult.IsFailure)
+                return BadRequest(filmVideoLinkResult.Error);
+            
 
         var command = new EditFilmCommand(
             id,
-            titleImageLink.Value,
+            titleImageLinkResult.Value,
             request.Title,
             request.Description,
             request.Year,
             request.Country,
             request.Director,
-            filmVideoLink.Value);
+            filmVideoLinkResult.Value);
 
         var result = await sender.Send(command, cancellationToken);
         return result.IsSuccess ? Ok() : BadRequest(result.Error);
@@ -156,6 +161,17 @@ public class FilmController(IMediator sender, ICloudStorageService storageServic
         CancellationToken cancellationToken)
     {
         var result = await sender.Send(new GetFilmsByActorIdQuery(id), cancellationToken);
+        return result.IsSuccess ? Ok(result.Value) : BadRequest(result.Error);
+    }
+    
+    [Route("api/genre/{id}/films")]
+    [HttpGet]
+    [AllowAnonymous]
+    public async Task<IActionResult> GetFilmsByGenreId(
+        [FromRoute] int id,
+        CancellationToken cancellationToken)
+    {
+        var result = await sender.Send(new GetFilmsByGenreIdQuery(id), cancellationToken);
         return result.IsSuccess ? Ok(result.Value) : BadRequest(result.Error);
     }
 }    

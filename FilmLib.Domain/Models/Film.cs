@@ -105,10 +105,6 @@ public class Film
         string? director, 
         string? filmVideoLink)
     {
-        if (!string.IsNullOrWhiteSpace(titleImageLink))
-        {
-            return Result.Failure(DomainException.EmptyOrOutOfRange(nameof(titleImageLink)).Message);
-        }
         
         if (!string.IsNullOrWhiteSpace(title) && title.Length > MAX_FILM_TITLE_LENGTH)
         {
@@ -125,13 +121,13 @@ public class Film
             return Result.Failure(DomainException.OutOfRange(nameof(year)).Message);
         }
 
-        TitleImageLink = titleImageLink ?? TitleImageLink;
+        TitleImageLink = titleImageLink == string.Empty? TitleImageLink : titleImageLink;
         Title = title ?? Title;
         Description = description ?? Description;
         Year = year ?? Year;
         Country = country ?? Country;
         Director = director ?? Director;
-        FilmVideoLink = filmVideoLink ?? FilmVideoLink;
+        FilmVideoLink = filmVideoLink == string.Empty? FilmVideoLink : filmVideoLink;
         return Result.Success();
     } 
     

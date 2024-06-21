@@ -1,0 +1,108 @@
+<app-spinner *ngIf="isLoading"></app-spinner>
+<mat-card>
+  <mat-card-title>Add new movie</mat-card-title>
+  <mat-card-content>
+    <form [formGroup]="movieForm" (ngSubmit)="onSubmit()">
+      <div>
+        <mat-form-field>
+          <mat-label>Title</mat-label>
+          <input matInput formControlName="title" />
+        </mat-form-field>
+      </div>
+      <div>
+        <mat-form-field>
+          <mat-label>Overview</mat-label>
+          <textarea matInput formControlName="description"></textarea>
+        </mat-form-field>
+      </div>
+      <div>
+        <mat-form-field>
+          <mat-label>Director</mat-label>
+          <input matInput formControlName="director" />
+        </mat-form-field>
+      </div>
+      <div>
+        <mat-form-field>
+          <mat-label>Year</mat-label>
+          <input matInput formControlName="year" />
+        </mat-form-field>
+      </div>
+      <div>
+        <mat-form-field>
+          <mat-label>Country</mat-label>
+          <input matInput formControlName="country" />
+        </mat-form-field>
+      </div>
+      <div class="file-input">
+        <label>Movie poster</label>
+        <input type="file" (change)="onPosterFileChange($event)" />
+      </div>
+      <div class="file-input">
+        <label>Movie video</label>
+        <input type="file" (change)="onMovieFileChange($event)" />
+      </div>
+      <div class="cast-container">
+        <mat-form-field>
+          <mat-label>Cast</mat-label>
+          <mat-select formControlName="actors" multiple>
+            <mat-select-trigger>
+              {{ actorNames }}
+            </mat-select-trigger>
+            <ngx-mat-select-search
+              [formControl]="actorSearchCtrl"
+            ></ngx-mat-select-search>
+            <mat-option
+              *ngFor="let actor of filteredActors | async"
+              [value]="actor"
+            >
+              {{ actor.name }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <button
+          mat-raised-button
+          color="primary"
+          (click)="openAddActorDialog()"
+        >
+          Add new actor
+        </button>
+      </div>
+      <div>
+        <mat-form-field>
+          <mat-label>Genres</mat-label>
+          <mat-select formControlName="genres" multiple>
+            <mat-select-trigger>
+              {{ genreNames }}
+            </mat-select-trigger>
+            <ngx-mat-select-search
+              [formControl]="genreSearchCtrl"
+            ></ngx-mat-select-search>
+            <mat-option
+              *ngFor="let genre of filteredGenres | async"
+              [value]="genre"
+            >
+              {{ genre.title }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <button
+          mat-raised-button
+          color="primary"
+          (click)="openAddGenreDialog()"
+        >
+          Add new genre
+        </button>
+      </div>
+      <div>
+        <button
+          mat-raised-button
+          color="primary"
+          type="submit"
+          [disabled]="!movieForm.valid"
+        >
+          Submit
+        </button>
+      </div>
+    </form>
+  </mat-card-content>
+</mat-card>

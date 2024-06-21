@@ -20,6 +20,8 @@ public class UserController(AuthService authService) : ControllerBase
             return BadRequest(response.Error);
         }
         
+        HttpContext.Response.Cookies.Append("cosy", response.Value);
+        
         return Ok();
     }
     
@@ -34,7 +36,7 @@ public class UserController(AuthService authService) : ControllerBase
         }
         HttpContext.Response.Cookies.Append("cosy", response.Value);
         
-        return Ok(response.Value);
+        return Ok();
     }
     
     [Route("api/user/logout")]
@@ -42,22 +44,26 @@ public class UserController(AuthService authService) : ControllerBase
     [AllowAnonymous]
     public async Task<IActionResult> LogoutUser()
     {
-        HttpContext.Response.Cookies.Delete("cosy");
         return Ok();
     }
     
     [Route("api/change/password")]
     [HttpPut]
-    [Authorize(Policy = nameof(Policy.AdminPolicy))]
-    public async Task<IActionResult> ChangePassword([FromBody] ChangePassword request, CancellationToken cancellationToken)
+    [Authorize(Policy = nameof(Policy.UserPolicy))]
+    public async Task<IActionResult> ChangePassword([FromForm] ChangePassword request, CancellationToken cancellationToken)
     {
-        var jwt = HttpContext.Request.Cookies["cosy"];
+        string authHeader = Request.Headers["Authorization"];
+        if (authHeader == null || !authHeader.StartsWith("Bearer "))
+        {
+            return BadRequest("Invalid token.");
+        }
+        var jwt = authHeader.Substring("Bearer ".Length).Trim();
         var userId = authService.GetUserId(jwt);
         if (userId.IsFailure)
         {
             return BadRequest(userId.Error);
         }
-        var response = await authService.ChangePassword(userId.Value, request.Password, request.NewPassword);
+        var response = await authService.ChangePassword(userId.Value, request.OldPassword, request.NewPassword);
         if (response.IsFailure)
         {
             return BadRequest(response.Error);
@@ -68,10 +74,16 @@ public class UserController(AuthService authService) : ControllerBase
     
     [Route("api/change/username")]
     [HttpPut]
-    [Authorize(Policy = nameof(Policy.AdminPolicy))]
-    public async Task<IActionResult> ChangeUsername([FromBody] ChangeUsername request, CancellationToken cancellationToken)
+    [Authorize(Policy = nameof(Policy.UserPolicy))]
+    public async Task<IActionResult> ChangeUsername([FromForm] ChangeUsername request, CancellationToken cancellationToken)
     {
-        var jwt = HttpContext.Request.Cookies["cosy"];
+        string authHeader = Request.Headers["Authorization"];
+        if (authHeader == null || !authHeader.StartsWith("Bearer "))
+        {
+            return BadRequest("Invalid token.");
+        }
+        var jwt = authHeader.Substring("Bearer ".Length).Trim();
+        Console.WriteLine(jwt);
         var userId = authService.GetUserId(jwt);
         if (userId.IsFailure)
         {

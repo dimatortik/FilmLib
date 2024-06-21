@@ -1,4 +1,4 @@
-@import "../../../../styles/variables";
+@import "../../../variables.scss";
 
 .content {
   color: #fff;
@@ -7,6 +7,13 @@
     background-position: right;
     background-repeat: no-repeat;
     mask-image: linear-gradient(black 95%, transparent);
+
+    .admin-options {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin: 10px;
+    }
 
     // xs media query
     @media (max-width: $breakpoint-xs) {
@@ -17,20 +24,57 @@
 
   &__container {
     padding-top: 60px;
-    background-image: linear-gradient(to right, rgba(31.5, 31.5, 31.5, 1) calc((50vw - 170px) - 340px), rgba(31.5, 31.5, 31.5, 0.84) 30%, rgba(31.5, 31.5, 31.5, 0.84) 100%);
+    background-image: linear-gradient(
+      to right,
+      rgba(31.5, 31.5, 31.5, 1) calc((50vw - 170px) - 340px),
+      rgba(31.5, 31.5, 31.5, 0.84) 30%,
+      rgba(31.5, 31.5, 31.5, 0.84) 100%
+    );
 
     // xs media query
     @media (max-width: $breakpoint-xs) {
       background-image: none;
       padding-top: 0;
     }
-
   }
 
   &__info {
     padding: 30px 0;
     display: flex;
     gap: 30px;
+
+    mat-form-field {
+      width: 100%;
+      color: white;
+    }
+
+    mat-form-field {
+      width: 100%;
+
+      .mdc-floating-label {
+        color: #fff;
+      }
+
+      .mat-mdc-form-field-wrapper
+        .mat-mdc-form-field-flex
+        .mat-mdc-form-field-infix {
+        color: #fff;
+      }
+
+      .mat-mdc-form-field-subscript-wrapper
+        .mat-mdc-form-field-hint-wrapper
+        .mat-mdc-form-field-hint-spacer {
+        color: #ffffff80;
+      }
+    }
+
+    .btn-category {
+      margin: 3px;
+    }
+
+    .full-width {
+      width: 100%;
+    }
 
     img {
       box-shadow: 0 0 4px rgba(0, 0, 0, 0.2);
@@ -40,7 +84,11 @@
 
     // xs media query
     @media (max-width: $breakpoint-xs) {
-      background-image: linear-gradient(to right, rgba(31.5, 31.5, 31.5, 1) 20%, rgba(31.5, 31.5, 31.5, 0) 50%);
+      background-image: linear-gradient(
+        to right,
+        rgba(31.5, 31.5, 31.5, 1) 20%,
+        rgba(31.5, 31.5, 31.5, 0) 50%
+      );
 
       img {
         margin-left: 20px;
@@ -51,130 +99,271 @@
         z-index: 4;
       }
     }
-
   }
 
-  &__data, &__data-mobile {
-
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: flex-start;
-
-    p {margin-top: 0;}
-    h3 {font-weight: 500; color: #fff; font-size: 1.1em; font-style: italic; opacity: 0.8; margin: 0;}
-    h4 {margin: 15px 0;}
-
-    &--categories {
-      display: flex;
-      gap: 6px;
-    }
-
-    // xs media query
-    @media (max-width: $breakpoint-xs) {
-      display: none;
-
-      h2 {margin: 0; font-size: 1.25rem;}
-      h3 {margin-top: 10px}
-      h4 {margin: 10px 0;}
-      p {font-size: 0.9rem;}
-      button {width: 100%}
-    }
-
-  }
-
-  &__data-mobile {
-    display: none;
-
-    // xs media query
-    @media (max-width: $breakpoint-xs) {
-      background: #212121;
-      display: block;
-      padding: 16px;
-    }
-
-  }
-
-  &__recommendations {
-
-    @media (min-width: $breakpoint-xs) and (max-width: $breakpoint-sm) {
-      padding: 16px;
-    }
-
-    &--cards {
-      display: grid;
-      grid-template-columns: repeat(6, minmax(0, 1fr));
-      gap: 8px;
-
-      // xs media query
-      @media (max-width: $breakpoint-xs) {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-      }
-
-      // sm media query with variables
-      @media (min-width: $breakpoint-xs) and (max-width: $breakpoint-sm) {
-        grid-template-columns: repeat(3, minmax(0, 1fr));
-      }
-
-      // md media query with variables
-      @media (min-width: $breakpoint-sm) and (max-width: $breakpoint-md) {
-        grid-template-columns: repeat(4, minmax(0, 1fr));
-      }
-
-    }
-
-    // xs media query
-    @media (max-width: $breakpoint-xs) {
-      h2 { text-align: center; }
-
-      &--cards {
-        justify-content: space-between;
-        padding: 0 16px;
-      }
-    }
-
-  }
-
-  &__no-recomended {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  &--cards {
+    display: grid;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
     gap: 8px;
-    font-size: 2rem;
-    height: 25vh;
 
-    mat-icon {
-      display: flex;
-      align-items: center;
+    // xs media query
+    @media (max-width: $breakpoint-xs) {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 
+    // sm media query with variables
+    @media (min-width: $breakpoint-xs) and (max-width: $breakpoint-sm) {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    // md media query with variables
+    @media (min-width: $breakpoint-sm) and (max-width: $breakpoint-md) {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
   }
-
-}
-
-.video-movie-main iframe {
-  background-color: #000;
-  border: 0;
-
-  width: 550px;
-  height: 315px;
 
   // xs media query
   @media (max-width: $breakpoint-xs) {
-    width: 92vw;
-    height: 25vh;
+    h2 {
+      text-align: center;
+    }
+
+    &--cards {
+      justify-content: space-between;
+      padding: 0 16px;
+    }
   }
 
-  // sm media query
-  @media (min-width: 576px) and (max-width: 767.98px) {
-    width: 80vw;
-    height: 40vh;
+  .video-section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 40px 0;
+
+    .video-player {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: rgba(0, 0, 0, 0.8);
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+      border: 2px solid rgba(255, 255, 255, 0.2);
+      max-width: 90%;
+      margin: 0 auto;
+
+      video {
+        max-width: 100%;
+        height: auto;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      }
+
+      // xs media query
+      @media (max-width: $breakpoint-xs) {
+        width: 92vw;
+        video {
+          height: 25vh;
+        }
+      }
+
+      // sm media query
+      @media (min-width: 576px) and (max-width: 767.98px) {
+        width: 70vw;
+        video {
+          height: 30vh;
+        }
+      }
+
+      // md media query
+      @media (min-width: 768px) and (max-width: 991.98px) {
+        width: 60vw;
+        video {
+          height: 35vh;
+        }
+      }
+
+      // lg media query
+      @media (min-width: 992px) and (max-width: 1199.98px) {
+        width: 50vw;
+        video {
+          height: 40vh;
+        }
+      }
+
+      // xl media query
+      @media (min-width: 1200px) {
+        width: 40vw;
+        video {
+          height: 45vh;
+        }
+      }
+    }
   }
 
-  // md media query
-  @media (min-width: 768px) and (max-width: 991.98px) {
-    width: 80vw;
-    height: 40vh;
+  &__cast {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    &--cards {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-top: 20px;
+    }
+
+    .cast-card {
+      width: 250px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+      border: 2px solid rgba(255, 255, 255, 0.2);
+      margin: 20px; /* добавляем отступы между карточками */
+      text-align: center; /* центрируем текст внутри карточки */
+    }
+
+    .cast-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+
+      mat-form-field {
+        width: 100%;
+      }
+
+      button {
+        margin-top: 7px;
+      }
+    }
+
+    img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      border-radius: 10px 10px 0 0;
+    }
+
+    /* xs media query */
+    @media (max-width: $breakpoint-xs) {
+      &--cards {
+        flex-direction: column;
+      }
+    }
   }
 
+  &__comments {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+
+    &--cards {
+      display: grid;
+      width: 100%;
+      grid-template-columns: repeat(auto-fit, minmax(100%, 1fr));
+      gap: 20px;
+      margin-top: 20px;
+      color: black;
+    }
+
+    .comment-card {
+      width: 100%;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+      border: 2px solid rgba(255, 255, 255, 0.2);
+    }
+
+    // Styles for the form section
+    h2 {
+      color: #ffffff;
+      margin-bottom: 20px;
+    }
+
+    .comment-form {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 70%;
+
+      mat-form-field {
+        width: 100%;
+
+        .mat-form-field-appearance-fill .mat-form-field-flex {
+          background-color: #424242; // Dark background for the form field
+        }
+
+        .mat-input-element {
+          color: #ffffff; // Light text color
+          background-color: #424242; // Dark background for input element
+        }
+
+        .mat-form-field-label {
+          color: rgba(255, 255, 255, 0.7); // Light color for placeholder
+        }
+
+        .mat-form-field-underline {
+          background-color: rgba(255, 255, 255, 0.7); // Light underline color
+        }
+
+        .mat-form-field-appearance-fill.mat-form-field-disabled
+          .mat-form-field-flex {
+          background-color: #3a3a3a;
+        }
+
+        .mat-form-field-appearance-fill.mat-focused .mat-form-field-flex {
+          background-color: #303030;
+        }
+
+        .mat-focused .mat-form-field-label {
+          color: #303030;
+        }
+
+        .mat-focused .mat-form-field-ripple {
+          background-color: #1e88e5;
+        }
+      }
+
+      button {
+        width: fit-content;
+        background-color: #1e88e5; // Blue background for button
+        color: #ffffff; // White text color for button
+
+        &:hover {
+          background-color: #1565c0; // Darker blue on hover
+        }
+      }
+    }
+  }
+
+  .cast-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    mat-form-field {
+      width: 100%;
+    }
+
+    button {
+      margin-top: 7px;
+    }
+  }
+
+  .admin-options {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    justify-items: stretch;
+    margin: 10px;
+
+    .btn-update {
+      margin: 5px;
+      background-color: #51d56e;
+    }
+
+    .btn-submit {
+      margin: 5px;
+      background-color: #51d56e;
+    }
+  }
 }
