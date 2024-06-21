@@ -1,6 +1,7 @@
 using System.Security.Claims;
 using CSharpFunctionalExtensions;
 using FilmLib.Application.Interfaces;
+using FilmLib.Domain.Enums;
 using FilmLib.Domain.Models;
 using FilmLib.Persistence;
 using Microsoft.EntityFrameworkCore;
@@ -13,25 +14,33 @@ public class AuthService(
     IJwtProvider jwtProvider)
 {
 
-    public async Task<Result> Register(string email, string password, string username)
+    public async Task<Result<string>> Register(string email, string password, string username)
     {
         var passwordHash = passwordHasher.GenerateHash(password);
-        
+    
         var userExists = await context.Users
             .AsNoTracking()
             .AnyAsync(u => u.Email == email);
         if (userExists)
-            return Result.Failure("User with the same email already exists.");
+            return Result.Failure<string>("User with the same email already exists.");
+    
+        var userRole = await context.Roles.FirstOrDefaultAsync(r => r.Name == nameof(Role.User));
         
         var user = User.Create(email, passwordHash, username);
         if (user.IsFailure)
-            Result.Failure(user.Error);
-
+            return Result.Failure<string>(user.Error);
+    
+        user.Value.Roles.Add(userRole);
+    
         await context.Users.AddAsync(user.Value);
-        
+    
         await context.SaveChangesAsync();
-        
-        return Result.Success();
+    
+        var loginResult = await Login(email, password);
+        if (loginResult.IsFailure)
+            return Result.Failure<string>(loginResult.Error);
+    
+        return Result.Success(loginResult.Value);
     }
     
     public async Task<Result<string>> Login(string email, string password)

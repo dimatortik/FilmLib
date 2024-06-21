@@ -41,6 +41,7 @@ public class GetFilmsQueryHandler(AppDbContext context) : IQueryHandler<GetFilms
                 Year = f.Year,
                 Country = f.Country,
                 Director = f.Director,
+                FilmVideoLink = f.FilmVideoLink
             });
         var films = await PagedList<FilmResponse>.CreateAsync(
             filmsResponsesQuery, 

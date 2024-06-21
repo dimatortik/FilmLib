@@ -6,7 +6,7 @@ public class FilmCommentResponse
     
     public string Body { get; set; }
     
-    public DateTime CreatedAt { get; private set; }
+    public DateTime CreatedAt { get;  set; }
 
     public string UserName { get; set; }
 

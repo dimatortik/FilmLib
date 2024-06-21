@@ -4,6 +4,7 @@
 // The list of which env maps to which file can be found in `.angular-cli.json`.
 
 export const environment = {
-    production: false,
-    theMovieDBApi: '73b2fc9fab947354d61cb3faa1a40405'
-  };
+  production: false,
+  theMovieDBApi: 'https://localhost:7062/api',
+  cookie: 'cosy',
+};

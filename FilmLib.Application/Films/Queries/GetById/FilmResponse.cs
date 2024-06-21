@@ -14,4 +14,8 @@ public class FilmResponse
     public int? Year{ get; set; }
     public string? Country { get;  set;}
     public string? Director { get;  set;}
+    
+    public string? FilmVideoLink { get; set; }
+    
+    
 }

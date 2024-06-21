@@ -1,0 +1,22 @@
+mat-card {
+  max-width: 800px;
+  margin: 2rem auto;
+  margin-top: 60px;
+  padding: 1rem;
+  color: white;
+  background-color: #333333;
+
+  mat-card-title {
+    color: white;
+    margin: 10px auto;
+    justify-content: center;
+  }
+
+  button {
+    display: block;
+    width: 100%;
+    background-color: #292525;
+
+    margin-top: 1rem;
+  }
+}

@@ -1,1 +1,87 @@
-<p>person works!</p>
+<!-- <mat-progress-spinner
+  mode="indeterminate"
+  color="primary"
+></mat-progress-spinner> -->
+
+<main class="content">
+  <section class="content__main">
+    <div class="content__container">
+      <div class="content__info container">
+        <img
+          *ngIf="!editMode"
+          src=""
+          data-src="{{ content?.actorImageLink }}"
+          data-loaded="true"
+          [alt]="content?.actorImageLink"
+          appImgMissingDirective
+        />
+
+        <div class="content__data" [formGroup]="actorForm">
+          <h2 *ngIf="!editMode">{{ content?.name }}</h2>
+
+          <mat-form-field *ngIf="editMode">
+            <mat-label>Name</mat-label>
+            <input matInput formControlName="actorName" />
+          </mat-form-field>
+
+          <h4>Overview</h4>
+
+          <p *ngIf="!editMode">{{ content?.description }}</p>
+
+          <mat-form-field *ngIf="editMode">
+            <mat-label>Overview</mat-label>
+            <textarea matInput formControlName="actorDescription"></textarea>
+          </mat-form-field>
+        </div>
+      </div>
+      <div *ngIf="editMode" class="file-input">
+        <label>Actor image</label>
+        <input type="file" (change)="onPosterFileChange($event)" />
+      </div>
+    </div>
+  </section>
+
+  <div class="admin-options">
+    <button
+      class="btn-update"
+      *ngIf="isAdmin && !editMode"
+      mat-raised-button
+      (click)="toggleEditMode()"
+    >
+      Update
+    </button>
+    <button
+      class="btn-submit"
+      *ngIf="isAdmin && editMode"
+      mat-raised-button
+      (click)="onSubmit()"
+    >
+      Submit
+    </button>
+    <button
+      *ngIf="isAdmin && editMode"
+      mat-raised-button
+      color="warn"
+      (click)="toggleEditMode()"
+    >
+      Cancel
+    </button>
+    <button
+      *ngIf="isAdmin && !editMode"
+      mat-raised-button
+      color="warn"
+      (click)="deleteActor()"
+    >
+      Delete
+    </button>
+  </div>
+
+  <section *ngIf="!editMode" class="content__film">
+    <h2>Movies</h2>
+    <div class="content__film--cards">
+      <div class="film-card" *ngFor="let movie of movies">
+        <app-poster-card [model]="movie" [isMovie]="true"></app-poster-card>
+      </div>
+    </div>
+  </section>
+</main>

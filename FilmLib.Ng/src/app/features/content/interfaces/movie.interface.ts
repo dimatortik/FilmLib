@@ -11,7 +11,7 @@ export interface IMovie {
     year?: number;
     country?: string;
     director?: string;
-    videoLink: string;
+    filmVideoLink: string;
     actors?: Array<IActor>;
     genres?: Array<IGenre>;
   }

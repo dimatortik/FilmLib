@@ -1,3 +1,14 @@
+using Microsoft.AspNetCore.Mvc;
+
 namespace FilmLib.API.Contracts.Genre;
 
-public record GenreRequest(string Title, string Description);
+public class GenreRequest
+{
+    [FromForm(Name = "title")]
+    public string? Title { get; set; }
+
+    [FromForm(Name = "description")]
+    public string? Description { get; set; }
+    
+}
+    

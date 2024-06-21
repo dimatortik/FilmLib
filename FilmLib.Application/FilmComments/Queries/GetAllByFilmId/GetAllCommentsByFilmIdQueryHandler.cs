@@ -17,6 +17,7 @@ public class GetAllCommentsByFilmIdQueryHandler(AppDbContext context) : IQueryHa
             {
                 Id = c.Id,
                 Body = c.Body,
+                CreatedAt = c.CreatedAt,
                 UserName = c.User.Username,
             })
             .ToListAsync(cancellationToken: cancellationToken);

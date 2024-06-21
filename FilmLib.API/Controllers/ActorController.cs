@@ -5,6 +5,7 @@ using FilmLib.Application.Actors.Commands.Update;
 using FilmLib.Application.Actors.Queries.GetActorsByFilmId;
 using FilmLib.Application.Actors.Queries.GetAll;
 using FilmLib.Application.Actors.Queries.GetById;
+using FilmLib.Application.Auth;
 using FilmLib.Infrastructure.Auth;
 using FilmLib.Infrastructure.CloudStorage;
 using MediatR;
@@ -13,7 +14,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace FilmLib.API.Controllers;
 
-public class ActorController(IMediator sender, ICloudStorageService cloud) : ControllerBase
+public class ActorController(IMediator sender, ICloudStorageService cloud, AuthService authService) : ControllerBase
 {
     [Route("api/actor")]
     [HttpPost]
@@ -22,7 +23,6 @@ public class ActorController(IMediator sender, ICloudStorageService cloud) : Con
         [FromForm] ActorRequest request,
         CancellationToken cancellationToken)
     {
-        
         var actorImageLink = await cloud.UploadFileAsync(request.ActorImage, request.ActorName);
         if (actorImageLink.IsFailure)
         {

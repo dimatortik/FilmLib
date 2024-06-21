@@ -21,6 +21,6 @@ public class CreateFilmCommentCommandHandler(AppDbContext context ) : ICommandHa
         await context.Comments.AddAsync(filmComment.Value, cancellationToken);
         await context.SaveChangesAsync(cancellationToken);
 
-        return Result.Success(); 
+        return Result.Success();
     }
 }

@@ -20,7 +20,7 @@ public class GenreController(IMediator sender) : ControllerBase
     [HttpPost]
     [Authorize(Policy = nameof(Policy.AdminPolicy))]
     public async Task<IActionResult> AddGenre(
-        [FromBody] GenreRequest request,
+        [FromForm] GenreRequest request,
         CancellationToken cancellationToken)
     {
         var command = new AddGenreCommand(
@@ -49,7 +49,7 @@ public class GenreController(IMediator sender) : ControllerBase
     [Authorize(Policy = nameof(Policy.AdminPolicy))]
     public async Task<IActionResult> UpdateGenre(
         [FromRoute] int id,
-        [FromBody] GenreRequest request,
+        [FromForm] GenreRequest request,
         CancellationToken cancellationToken)
     {
         var command = new EditGenreCommand(

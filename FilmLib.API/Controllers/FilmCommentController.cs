@@ -14,7 +14,7 @@ namespace FilmLib.API.Controllers;
 [ApiController]
 public class FilmCommentController(IMediator sender, AuthService auth) : ControllerBase
 {
-    [Route("/api/film/{id}/comment)")]
+    [Route("/api/film/{id}/comment")]
     [HttpPost]
     [Authorize(Policy = nameof(Policy.UserPolicy))]
     public async Task<IActionResult> AddComment(
@@ -22,7 +22,12 @@ public class FilmCommentController(IMediator sender, AuthService auth) : Control
         [FromRoute] Guid id,
         CancellationToken cancellationToken)
     {
-        var jwt = HttpContext.Request.Cookies["cosy"];
+        string authHeader = Request.Headers["Authorization"];
+        if (authHeader == null || !authHeader.StartsWith("Bearer "))
+        {
+            return BadRequest("Invalid token.");
+        }
+        var jwt = authHeader.Substring("Bearer ".Length).Trim();
         var userId = auth.GetUserId(jwt);
         if (userId.IsFailure)
         {

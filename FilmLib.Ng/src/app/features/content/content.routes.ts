@@ -1,11 +1,13 @@
-import {Route} from '@angular/router';
-import {ContentComponent} from './content.component';
-import {DetailComponent} from './detail/detail.component';
+import { Route } from '@angular/router';
+import { ContentComponent } from './content.component';
+import { DetailComponent } from './detail/detail.component';
 
 export const CONTENT_ROUTES: Route[] = [
-  {path: '',
+  {
+    path: '',
     children: [
-      { path: '', component: ContentComponent},
-      { path: ':url', component: DetailComponent}
-    ]},
+      { path: '', component: ContentComponent },
+      { path: ':url', component: DetailComponent },
+    ],
+  },
 ];

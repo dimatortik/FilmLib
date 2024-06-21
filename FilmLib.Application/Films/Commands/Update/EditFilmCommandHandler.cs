@@ -30,14 +30,6 @@ public class EditFilmCommandHandler(AppDbContext context) : ICommandHandler<Edit
             return Result.Failure(editedFilm.Error);
         }
         
-        await context.Films.ExecuteUpdateAsync( setters => setters.
-                SetProperty(p => p.TitleImageLink, p => request.TitleImageLink)
-                .SetProperty(p => p.Title, p => request.Title)
-                .SetProperty(p => p.Description, p => request.Description)
-                .SetProperty(p => p.Year, p => request.Year)
-                .SetProperty(p => p.Country, p => request.Country)
-                .SetProperty(p => p.Director, p => request.Director)
-                .SetProperty(p => p.FilmVideoLink, p => request.FilmVideoLink), cancellationToken: cancellationToken);
         await context.SaveChangesAsync(cancellationToken);
         
         return Result.Success();

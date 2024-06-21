@@ -1,0 +1,35 @@
+mat-card {
+  max-width: 800px;
+  margin: 2rem auto;
+  margin-top: 60px;
+  padding: 1rem;
+  color: white;
+  background-color: #333333;
+
+  mat-card-title {
+    color: white;
+    margin: 10px auto;
+  }
+
+  mat-form-field {
+    display: block;
+    width: 100%;
+    color: white;
+  }
+
+  .cast-container {
+    margin: 15px auto;
+  }
+  .file-input {
+    display: block;
+    width: 100%;
+    margin-bottom: 1rem;
+    color: white;
+  }
+
+  button {
+    display: block;
+    width: 100%;
+    margin-top: 1rem;
+  }
+}

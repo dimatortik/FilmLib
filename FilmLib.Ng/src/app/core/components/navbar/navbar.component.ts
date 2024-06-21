@@ -1,11 +1,11 @@
-import {Component, EventEmitter, HostListener, Output} from '@angular/core';
-import {themeColors} from '../theme-color';
-import {Color} from '../color.enum';
-import {MatMenuModule} from "@angular/material/menu";
-import {RouterLink, RouterLinkActive} from "@angular/router";
-import {NgForOf, NgOptimizedImage} from "@angular/common";
-import {MatIconModule} from "@angular/material/icon";
-import {MatAnchor, MatIconButton} from "@angular/material/button";
+import { Component, HostListener } from '@angular/core';
+import { MatMenuModule } from '@angular/material/menu';
+import { RouterLink, RouterLinkActive } from '@angular/router';
+import { NgForOf, NgOptimizedImage, NgIf } from '@angular/common';
+import { MatIconModule } from '@angular/material/icon';
+import { Subscription } from 'rxjs';
+import { MatAnchor, MatIconButton } from '@angular/material/button';
+import { AuthService } from '../../../features/auth/services/auth.service/auth.service';
 
 @Component({
   selector: 'app-navbar',
@@ -19,29 +19,39 @@ import {MatAnchor, MatIconButton} from "@angular/material/button";
     MatIconModule,
     NgForOf,
     MatAnchor,
-    MatIconButton
+    MatIconButton,
+    NgIf,
   ],
-  standalone: true
+  standalone: true,
 })
 export class NavbarComponent {
-
-  @Output() changeColorTheme: EventEmitter<string> = new EventEmitter();
-
-  themeColorList = themeColors;
-  themeColorInit: string = Color.RED;
-
   isScrolled = false;
+  isAuthenticated = false;
+  isAdmin = false;
+  authSubscription: Subscription;
+  roleSubscription: Subscription;
 
   @HostListener('window:scroll')
   scrollEvent() {
     this.isScrolled = window.scrollY >= 30;
   }
 
-  constructor() {}
+  constructor(private authService: AuthService) {
+    this.authSubscription = this.authService
+      .isAuthenticated()
+      .subscribe((isAuthenticated) => {
+        this.isAuthenticated = isAuthenticated;
+      });
 
-  setColorTheme(color: string) {
-    this.themeColorInit = color;
-    this.changeColorTheme.emit(color);
+    this.roleSubscription = this.authService
+      .getUserDetails()
+      .subscribe((detail) => {
+        this.isAdmin = detail.role === 'Admin';
+      });
   }
 
+  onLogout(): void {
+    this.authService.logout();
+    this.isAuthenticated = false;
+  }
 }

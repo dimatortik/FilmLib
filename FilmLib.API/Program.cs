@@ -27,6 +27,7 @@ services.AddSession(options =>
     options.Cookie.IsEssential = true;
 });
 
+builder.WebHost.ConfigureKestrel(options => options.Limits.MaxRequestBodySize = 1 * 1024 * 1024 * 1024);
 
 services.AddMediatR(cfg =>
 {
@@ -36,11 +37,16 @@ services.AddMediatR(cfg =>
 
 services.AddCors(options =>
 {
-    options.AddDefaultPolicy(policyBuilder =>
+    options.AddPolicy("AllowAll",policyBuilder =>
     {
-        policyBuilder.AllowAnyOrigin()
+        policyBuilder
+            .WithOrigins("http://localhost:4200")
+            .WithExposedHeaders("Set-Cookie")
+            .SetIsOriginAllowedToAllowWildcardSubdomains()
+            .AllowCredentials()
             .AllowAnyMethod()
             .AllowAnyHeader();
+    
     });
 });
 
@@ -61,11 +67,11 @@ app.UseHsts();
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
-app.UseCors();
+app.UseCors("AllowAll");
 app.UseCookiePolicy(new CookiePolicyOptions
 {
-    MinimumSameSitePolicy = SameSiteMode.Strict,
-    HttpOnly = HttpOnlyPolicy.Always,
+    MinimumSameSitePolicy = SameSiteMode.None,
+    HttpOnly = HttpOnlyPolicy.None,
     Secure = CookieSecurePolicy.Always
 });
 app.UseSession();
