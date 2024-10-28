@@ -25,7 +25,7 @@ public class GetFilmsByActorIdQueryHandler(AppDbContext context) : IQueryHandler
                 Title = f.Title,
                 Description = f.Description,
                 Views = f.Views,
-                Rating = f.Rating.RatingValue,
+                Rating = f.RatingObject.RatingValue,
                 Year = f.Year,
                 Country = f.Country,
                 Director = f.Director,

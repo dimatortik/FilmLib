@@ -17,7 +17,7 @@ public class Actor
         ActorImageLink = actorImageLink;
         Name = name;
         Description = description;
-        Rating = Rating.Create().Value;
+        RatingObject = RatingObject.Create().Value;
     }
     public Guid Id { get; private set; }
     
@@ -27,7 +27,7 @@ public class Actor
     
     public string Description { get; private set; }
     
-    public Rating Rating { get; private set; }
+    public RatingObject RatingObject { get; private set; }
 
     public IReadOnlyCollection<Film> Films => _films;
     
@@ -78,10 +78,10 @@ public class Actor
         return Result.Success(this);
     }
     
-    public Result<Rating> AddVote(int ratingValue)
+    public Result<RatingObject> AddVote(int ratingValue)
     {
-        Rating = Rating.AddVote(ratingValue).Value;
-        return Rating;
+        RatingObject = RatingObject.AddRate(ratingValue).Value;
+        return RatingObject;
     }
     
 }

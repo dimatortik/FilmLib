@@ -11,7 +11,8 @@ public class AddGenreCommandHandle(AppDbContext context) : ICommandHandler<AddGe
     public async Task<Result> Handle(AddGenreCommand request, CancellationToken cancellationToken)
     {
         var genreExist = await context.Genres
-            .AnyAsync(g => g.Title == request.Title);
+            .AnyAsync(g => g.Title == request.Title, cancellationToken: cancellationToken);
+       
         if (genreExist)
         {
             return Result.Failure("Genre with the same title already exists.");

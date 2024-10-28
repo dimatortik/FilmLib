@@ -21,7 +21,11 @@ public class FilmConfiguration : IEntityTypeConfiguration<Film>
         builder.Property(f => f.Country);
         builder.Property(f => f.Director);
         builder.Property(f => f.Views);
-        builder.ComplexProperty(f => f.Rating);
+        builder.ComplexProperty(f => f.RatingObject, ratingBuilder =>
+        {
+            ratingBuilder.Property(r => r.RatingValue).HasColumnName("Rating");
+            ratingBuilder.Property(r => r.NumberOfVotes).HasColumnName("NumberOfVotes");
+        });
         builder.HasMany(f => f.Actors)
             .WithMany(a => a.Films);
         builder.HasMany(f => f.Genres)

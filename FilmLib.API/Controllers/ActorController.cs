@@ -6,6 +6,7 @@ using FilmLib.Application.Actors.Queries.GetActorsByFilmId;
 using FilmLib.Application.Actors.Queries.GetAll;
 using FilmLib.Application.Actors.Queries.GetById;
 using FilmLib.Application.Auth;
+using FilmLib.Application.Interfaces;
 using FilmLib.Infrastructure.Auth;
 using FilmLib.Infrastructure.CloudStorage;
 using MediatR;
@@ -14,9 +15,10 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace FilmLib.API.Controllers;
 
-public class ActorController(IMediator sender, ICloudStorageService cloud, AuthService authService) : ControllerBase
+[Route("api")]
+public class ActorController(IMediator sender, ICloudStorageService cloud) : ControllerBase
 {
-    [Route("api/actor")]
+    [Route("actor")]
     [HttpPost]
     [Authorize(Policy = nameof(Policy.AdminPolicy))]
     public async Task<IActionResult> AddActor(
@@ -37,7 +39,7 @@ public class ActorController(IMediator sender, ICloudStorageService cloud, AuthS
     }
     
     
-    [Route("api/actor/{id}")]
+    [Route("actor/{id}")]
     [HttpDelete]
     [Authorize(Policy = nameof(Policy.AdminPolicy))]
     public async Task<IActionResult> DeleteActor(
@@ -49,7 +51,7 @@ public class ActorController(IMediator sender, ICloudStorageService cloud, AuthS
         return result.IsSuccess ? Ok() : BadRequest(result.Error);
     }
     
-    [Route("api/actor/{id}")]
+    [Route("actor/{id}")]
     [HttpPut]
     [Authorize(Policy = nameof(Policy.AdminPolicy))]
     public async Task<IActionResult> UpdateActor(
@@ -67,7 +69,7 @@ public class ActorController(IMediator sender, ICloudStorageService cloud, AuthS
         return result.IsSuccess ? Ok() : BadRequest(result.Error);
     }
     
-    [Route("api/film/{id}/actors")]
+    [Route("film/{id}/actors")]
     [HttpGet]
     [AllowAnonymous]
     public async Task<IActionResult> GetActorsByFilmId(
@@ -79,7 +81,7 @@ public class ActorController(IMediator sender, ICloudStorageService cloud, AuthS
         return result.IsSuccess ? Ok(result.Value) : NotFound(result.Error);
     }
     
-    [Route("api/actors")]
+    [Route("actors")]
     [HttpGet]
     [AllowAnonymous]
     public async Task<IActionResult> GetActors(
@@ -91,7 +93,7 @@ public class ActorController(IMediator sender, ICloudStorageService cloud, AuthS
         return result.IsSuccess ? Ok(result.Value) : NotFound(result.Error);
     }
     
-    [Route("api/actor/{id}")]
+    [Route("actor/{id}")]
     [HttpGet]
     [AllowAnonymous]
     public async Task<IActionResult> GetActorById(

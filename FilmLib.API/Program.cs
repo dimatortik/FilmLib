@@ -19,14 +19,6 @@ services.AddDbContext<AppDbContext>(options =>
 
 services.AddCloudStorage(configuration);
 
-services.AddDistributedMemoryCache();
-services.AddSession(options =>
-{
-    options.IdleTimeout = TimeSpan.FromDays(1);
-    options.Cookie.HttpOnly = true;
-    options.Cookie.IsEssential = true;
-});
-
 builder.WebHost.ConfigureKestrel(options => options.Limits.MaxRequestBodySize = 1 * 1024 * 1024 * 1024);
 
 services.AddMediatR(cfg =>
@@ -34,6 +26,12 @@ services.AddMediatR(cfg =>
     cfg.RegisterServicesFromAssemblies(typeof(CreateFilmCommand).GetTypeInfo().Assembly, 
         typeof(Program).GetTypeInfo().Assembly);
 });
+
+services.AddStackExchangeRedisCache(opt =>
+{
+    opt.Configuration = configuration.GetConnectionString("Redis");
+});
+
 
 services.AddCors(options =>
 {
@@ -46,7 +44,6 @@ services.AddCors(options =>
             .AllowCredentials()
             .AllowAnyMethod()
             .AllowAnyHeader();
-    
     });
 });
 
@@ -74,7 +71,6 @@ app.UseCookiePolicy(new CookiePolicyOptions
     HttpOnly = HttpOnlyPolicy.None,
     Secure = CookieSecurePolicy.Always
 });
-app.UseSession();
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();

@@ -1,6 +1,5 @@
 using FilmLib.API.Contracts.Film;
-using FilmLib.Application.Auth;
-using FilmLib.Application.Films.Commands.AddVote;
+using FilmLib.Application.Films.Commands.AddRate;
 using FilmLib.Application.Films.Commands.Create;
 using FilmLib.Application.Films.Commands.Delete;
 using FilmLib.Application.Films.Commands.Update;
@@ -8,8 +7,8 @@ using FilmLib.Application.Films.Queries.GetAll;
 using FilmLib.Application.Films.Queries.GetById;
 using FilmLib.Application.Films.Queries.GetFilmsByActorId;
 using FilmLib.Application.Films.Queries.GetFilmsByGenreId;
+using FilmLib.Application.Interfaces;
 using FilmLib.Infrastructure.Auth;
-using FilmLib.Infrastructure.CloudStorage;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -17,33 +16,33 @@ using Microsoft.AspNetCore.Mvc;
 namespace FilmLib.API.Controllers;
 
 [ApiController]
-public class FilmController(IMediator sender, ICloudStorageService storageService, AuthService authService) : ControllerBase
+public class FilmController(IMediator sender, ICloudStorageService storageService) : ControllerBase
 {
     [Route("api/film")]
     [HttpPost]
     [Authorize(Policy = nameof(Policy.AdminPolicy))]
     public async Task<IActionResult> AddFilm(
-        [FromForm] FilmRequest request,
+        [FromForm] FilmCreateRequest createRequest,
         CancellationToken cancellationToken)
     {
-        var titleImageLink = await storageService.UploadFileAsync(request.TitleImage, request.Title);
+        var titleImageLink = await storageService.UploadFileAsync(createRequest.TitleImage, createRequest.Title);
         if (titleImageLink.IsFailure)
             return BadRequest(titleImageLink.Error);
 
-        var filmVideoLink = await storageService.UploadFileAsync(request.FilmVideo, request.Title);
+        var filmVideoLink = await storageService.UploadFileAsync(createRequest.FilmVideo, createRequest.Title);
         if (filmVideoLink.IsFailure)
             return BadRequest(filmVideoLink.Error);
 
         var command = new CreateFilmCommand(
             titleImageLink.Value,
-            request.Title,
-            request.Description,
-            request.Year,
-            request.Country,
-            request.Director,
+            createRequest.Title,
+            createRequest.Description,
+            createRequest.Year,
+            createRequest.Country,
+            createRequest.Director,
             filmVideoLink.Value,
-            request.Actors,
-            request.Genres);
+            createRequest.Actors,
+            createRequest.Genres);
 
         var result = await sender.Send(command, cancellationToken);
         return result.IsSuccess ? Ok() : BadRequest(result.Error);
@@ -53,34 +52,31 @@ public class FilmController(IMediator sender, ICloudStorageService storageServic
     [HttpPut]
     [Authorize(Policy = nameof(Policy.AdminPolicy))]
     public async Task<IActionResult> UpdateFilm(
-        [FromForm] FilmRequest request,
+        [FromForm] FilmCreateRequest createRequest,
         [FromRoute] Guid id,
         CancellationToken cancellationToken)
     {
-        // var titleImageLink = "";
-        // var filmVideoLink = "";
-        
-            var titleImageLinkResult = await storageService.UploadFileAsync(request.TitleImage, request.Title);
+            var titleImageLinkResult = await storageService.UploadFileAsync(createRequest.TitleImage, createRequest.Title);
             if (titleImageLinkResult.IsFailure)
                 return BadRequest(titleImageLinkResult.Error);
 
-            var filmVideoLinkResult = await storageService.UploadFileAsync(request.FilmVideo, request.Title);
+            var filmVideoLinkResult = await storageService.UploadFileAsync(createRequest.FilmVideo, createRequest.Title);
             if (filmVideoLinkResult.IsFailure)
                 return BadRequest(filmVideoLinkResult.Error);
             
 
-        var command = new EditFilmCommand(
-            id,
-            titleImageLinkResult.Value,
-            request.Title,
-            request.Description,
-            request.Year,
-            request.Country,
-            request.Director,
-            filmVideoLinkResult.Value);
+            var command = new EditFilmCommand(
+                id,
+                titleImageLinkResult.Value,
+                createRequest.Title,
+                createRequest.Description,
+                createRequest.Year,
+                createRequest.Country,
+                createRequest.Director,
+                filmVideoLinkResult.Value);
 
-        var result = await sender.Send(command, cancellationToken);
-        return result.IsSuccess ? Ok() : BadRequest(result.Error);
+            var result = await sender.Send(command, cancellationToken);
+            return result.IsSuccess ? Ok() : BadRequest(result.Error);
     }
 
     [Route("api/film/{id}")]
@@ -102,6 +98,7 @@ public class FilmController(IMediator sender, ICloudStorageService storageServic
         string? searchTerm,
         string? sortColumn,
         string? sortOrder,
+        [FromQuery]List<string>? genres,
         int page,
         int pageSize,
         CancellationToken cancellationToken)
@@ -111,6 +108,7 @@ public class FilmController(IMediator sender, ICloudStorageService storageServic
                 searchTerm,
                 sortColumn,
                 sortOrder,
+                genres,
                 page,
                 pageSize), cancellationToken);
 
@@ -129,26 +127,15 @@ public class FilmController(IMediator sender, ICloudStorageService storageServic
     }
 
     [Route("api/film/{id}/vote")]
-    [HttpGet]
+    [HttpPost]
     [Authorize(Policy = nameof(Policy.UserPolicy))]
-    public async Task<IActionResult> VoteFilm(
+    public async Task<IActionResult> RateFilm(
         [FromRoute] Guid id,
-        [FromBody] int voteValue,
+        [FromForm] RateFilmRequest request,
         CancellationToken cancellationToken)
     {
-        var votedFilms = HttpContext.Session.GetString("votedFilms");
-        if (votedFilms != null && votedFilms.Split(',').Contains(id.ToString()))
-        {
-            return BadRequest("You have already voted for this film.");
-        }
-
-        var command = new AddVoteCommand(id, voteValue);
+        var command = new AddRateCommand(id, request.RatingValue, request.UserId);
         var result = await sender.Send(command, cancellationToken);
-
-        if (result.IsSuccess)
-        {
-            HttpContext.Session.SetString("votedFilms", votedFilms != null ? $"{votedFilms},{id}" : id.ToString());
-        }
 
         return result.IsSuccess ? Ok() : BadRequest(result.Error);
     }

@@ -1,3 +1,4 @@
+using FilmLib.Domain;
 using FilmLib.Domain.Models;
 using FilmLib.Persistence.Configurations;
 using Microsoft.EntityFrameworkCore;
@@ -16,6 +17,7 @@ public class AppDbContext(
     public DbSet<Genre> Genres { get; set; }
     public DbSet<FilmComment> Comments { get; set; }
     
+    public DbSet<Rating> Ratings { get; set; }
     public DbSet<RoleEntity> Roles { get; set; }
     
     public DbSet<PermissionEntity> Permissions { get; set; }

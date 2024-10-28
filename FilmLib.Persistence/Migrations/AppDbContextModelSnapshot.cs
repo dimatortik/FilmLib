@@ -73,15 +73,15 @@ namespace FilmLib.Persistence.Migrations
                         .HasMaxLength(25)
                         .HasColumnType("character varying(25)");
 
-                    b.ComplexProperty<Dictionary<string, object>>("Rating", "FilmLib.Domain.Models.Actor.Rating#Rating", b1 =>
+                    b.ComplexProperty<Dictionary<string, object>>("RatingObject", "FilmLib.Domain.Models.Actor.RatingObject#RatingObject", b1 =>
                         {
                             b1.IsRequired();
 
                             b1.Property<int>("NumberOfVotes")
                                 .HasColumnType("integer");
 
-                            b1.Property<double>("RatingValue")
-                                .HasColumnType("double precision");
+                            b1.Property<decimal>("RatingValue")
+                                .HasColumnType("numeric");
                         });
 
                     b.HasKey("Id");
@@ -125,15 +125,17 @@ namespace FilmLib.Persistence.Migrations
                     b.Property<int?>("Year")
                         .HasColumnType("integer");
 
-                    b.ComplexProperty<Dictionary<string, object>>("Rating", "FilmLib.Domain.Models.Film.Rating#Rating", b1 =>
+                    b.ComplexProperty<Dictionary<string, object>>("RatingObject", "FilmLib.Domain.Models.Film.RatingObject#RatingObject", b1 =>
                         {
                             b1.IsRequired();
 
                             b1.Property<int>("NumberOfVotes")
-                                .HasColumnType("integer");
+                                .HasColumnType("integer")
+                                .HasColumnName("NumberOfVotes");
 
-                            b1.Property<double>("RatingValue")
-                                .HasColumnType("double precision");
+                            b1.Property<decimal>("RatingValue")
+                                .HasColumnType("numeric")
+                                .HasColumnName("Rating");
                         });
 
                     b.HasKey("Id");
@@ -214,6 +216,33 @@ namespace FilmLib.Persistence.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("FilmLib.Domain.Rating", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<Guid>("FilmId")
+                        .HasColumnType("uuid");
+
+                    b.Property<decimal>("RatingNumber")
+                        .HasColumnType("numeric");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("FilmId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Ratings");
                 });
 
             modelBuilder.Entity("FilmLib.Domain.RolePermissionEntity", b =>
@@ -349,6 +378,25 @@ namespace FilmLib.Persistence.Migrations
                 {
                     b.HasOne("FilmLib.Domain.Models.Film", "Film")
                         .WithMany("FilmComments")
+                        .HasForeignKey("FilmId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("FilmLib.Domain.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Film");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("FilmLib.Domain.Rating", b =>
+                {
+                    b.HasOne("FilmLib.Domain.Models.Film", "Film")
+                        .WithMany()
                         .HasForeignKey("FilmId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();

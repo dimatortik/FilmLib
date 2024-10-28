@@ -7,9 +7,13 @@ namespace FilmLib.Domain.Models;
 public class FilmComment
 {
     public const int MAX_FILM_COMMENT_LENGTH = 500;
-    private FilmComment()
+    private FilmComment(string body, Guid userId, Guid filmId)
     {
-        
+        Id = Guid.NewGuid();
+        Body = body;
+        CreatedAt = DateTime.UtcNow;
+        UserId = userId;
+        FilmId = filmId;
     }
 
     public Guid Id { get; private set; }
@@ -28,21 +32,13 @@ public class FilmComment
     
     public static Result<FilmComment> Create(string body, Guid userId, Guid filmId)
     {
-        var filmComment = new FilmComment
-        {
-            Id = Guid.NewGuid(),
-            Body = body,
-            CreatedAt = DateTime.UtcNow, 
-            UserId = userId,
-            FilmId = filmId
-        };
         
         if ( string.IsNullOrWhiteSpace(body) || body.Length > MAX_FILM_COMMENT_LENGTH)
         {
             return Result.Failure<FilmComment>(DomainException.EmptyOrOutOfRange("Text of comment").Message);
         }
-    
-        return Result.Success(filmComment);
+        
+        return Result.Success(new FilmComment(body, userId, filmId));
     }
 
     

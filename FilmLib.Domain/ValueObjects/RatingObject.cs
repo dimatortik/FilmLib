@@ -3,18 +3,18 @@ using FilmLib.Domain.Exceptions;
 
 namespace FilmLib.Domain.ValueObjects;
 
-public class Rating
+public class RatingObject
 {
-    private double _ratingValue;
+    private decimal _ratingValue;
     private int _numberOfVotes;
 
-    private Rating(double ratingValue, int numberOfVotes)
+    private RatingObject(decimal ratingValue, int numberOfVotes)
     {
         _ratingValue = ratingValue;
         _numberOfVotes = numberOfVotes;
     }
 
-    public double RatingValue
+    public decimal RatingValue
     {
         get => _ratingValue;
         private set
@@ -37,13 +37,18 @@ public class Rating
         }
     }
     
-    public static Result<Rating> Create()
+    public static Result<RatingObject> Create()
     {
-        return new Rating(0, 0);
+        return new RatingObject(0, 0);
+    }
+    
+    public static Result<RatingObject> Create(decimal ratingValue, int numberOfVotes)
+    {
+        return new RatingObject(ratingValue, numberOfVotes);
     }
     
 
-    public Result<Rating> AddVote(double newVote)
+    public Result<RatingObject> AddRate(decimal newVote)
     {
         if (newVote < 0 || newVote > 10)
             Result.Failure(DomainException.ValueObjects.RatingEmptyOrOutOfRage().Message);
@@ -52,4 +57,22 @@ public class Rating
        NumberOfVotes++;
         return Result.Success(this);
     }
+    
+    public static Result<RatingObject> CalculateRating(List<Rating> ratings)
+    {
+        if (ratings.Count == 0)
+        {
+            return Result.Failure<RatingObject>(DomainException.EmptyOrOutOfRange("Rating").Message);
+        }
+
+        var ratingValue = ratings.Select(x => x.RatingNumber).Average();
+        
+        var ratingObject = RatingObject.Create(ratingValue, ratings.Count);
+        
+        if (ratingObject.IsFailure)
+            return Result.Failure<RatingObject>(ratingObject.Error);
+        
+        return Result.Success(ratingObject.Value);
+    }
+
 }

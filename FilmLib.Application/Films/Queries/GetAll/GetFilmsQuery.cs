@@ -7,5 +7,6 @@ public record GetFilmsQuery(
     string? SearchTerm, 
     string? SortColumn, 
     string? SortOrder,
+    List<string> Genres,
     int Page,
     int PageSize) : IQuery<PagedList<FilmResponse>>;

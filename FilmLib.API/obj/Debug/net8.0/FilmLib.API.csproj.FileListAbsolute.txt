@@ -129,3 +129,9 @@
 /Users/dimazanuda/RiderProjects/FilmLib/FilmLib.API/bin/Debug/net8.0/AWSSDK.Core.dll
 /Users/dimazanuda/RiderProjects/FilmLib/FilmLib.API/bin/Debug/net8.0/AWSSDK.Extensions.NETCore.Setup.dll
 /Users/dimazanuda/RiderProjects/FilmLib/FilmLib.API/bin/Debug/net8.0/AWSSDK.S3.dll
+/Users/dimazanuda/RiderProjects/FilmLib/FilmLib.API/bin/Debug/net8.0/Microsoft.Extensions.Caching.StackExchangeRedis.dll
+/Users/dimazanuda/RiderProjects/FilmLib/FilmLib.API/bin/Debug/net8.0/Microsoft.Extensions.DependencyInjection.Abstractions.dll
+/Users/dimazanuda/RiderProjects/FilmLib/FilmLib.API/bin/Debug/net8.0/Microsoft.Extensions.Logging.Abstractions.dll
+/Users/dimazanuda/RiderProjects/FilmLib/FilmLib.API/bin/Debug/net8.0/Microsoft.Extensions.Options.dll
+/Users/dimazanuda/RiderProjects/FilmLib/FilmLib.API/bin/Debug/net8.0/Pipelines.Sockets.Unofficial.dll
+/Users/dimazanuda/RiderProjects/FilmLib/FilmLib.API/bin/Debug/net8.0/StackExchange.Redis.dll

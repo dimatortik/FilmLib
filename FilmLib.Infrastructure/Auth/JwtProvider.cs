@@ -59,8 +59,6 @@ public class JwtProvider(IOptions<JwtSettings> jwtSettings) : IJwtProvider
             .Identity;
         return principal as ClaimsIdentity;
     }
-
-
 }
 
 public class JwtSettings

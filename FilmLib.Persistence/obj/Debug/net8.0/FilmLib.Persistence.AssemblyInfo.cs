@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("FilmLib.Persistence")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+129e04053182abcce68ac9bd540195eed63894e9")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+82eb507b3f882d58f91a6e74372180c19daeb18c")]
 [assembly: System.Reflection.AssemblyProductAttribute("FilmLib.Persistence")]
 [assembly: System.Reflection.AssemblyTitleAttribute("FilmLib.Persistence")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

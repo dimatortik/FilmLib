@@ -40,6 +40,7 @@ export class NavbarComponent {
     this.authSubscription = this.authService
       .isAuthenticated()
       .subscribe((isAuthenticated) => {
+        console.log(isAuthenticated);
         this.isAuthenticated = isAuthenticated;
       });
 

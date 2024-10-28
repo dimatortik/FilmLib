@@ -1,10 +1,12 @@
 
+using System.Text.Json.Serialization;
 using Microsoft.EntityFrameworkCore;
 
 namespace FilmLib.Application.Messaging;
 
 public class PagedList<T> 
 {
+    [JsonConstructor]
     private PagedList(List<T> items, int page, int pageSize, int totalCount)
     {
         Items = items;

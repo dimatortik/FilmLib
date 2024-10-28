@@ -5,13 +5,15 @@ using FilmLib.Domain.Enums;
 using FilmLib.Domain.Models;
 using FilmLib.Persistence;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Distributed;
 
 namespace FilmLib.Application.Auth;
 
 public class AuthService(
     IPasswordHasher passwordHasher, 
     AppDbContext context,
-    IJwtProvider jwtProvider)
+    IJwtProvider jwtProvider,
+    IDistributedCache cache)
 {
 
     public async Task<Result<string>> Register(string email, string password, string username)
@@ -45,7 +47,6 @@ public class AuthService(
     
     public async Task<Result<string>> Login(string email, string password)
     {
-        
         var user = await context.Users
             .AsNoTracking()
             .Include(user => user.Roles)

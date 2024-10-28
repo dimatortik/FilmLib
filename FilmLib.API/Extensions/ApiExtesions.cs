@@ -44,6 +44,8 @@ public static class ApiExtensions
                 };
             });
         
+        
+        
         services.AddScoped<IJwtProvider, JwtProvider>();
         services.AddScoped<IPasswordHasher, PasswordHasher>();
         services.AddScoped<AuthService>();
@@ -93,4 +95,5 @@ public static class ApiExtensions
         services.AddScoped<ICloudStorageService, CloudStorageService>();
     }
     
+
 }

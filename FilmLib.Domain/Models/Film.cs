@@ -18,7 +18,7 @@ public class Film
         Description = description;
         Year = year;
         Views = 0;
-        Rating = Rating.Create().Value;
+        RatingObject = RatingObject.Create().Value;
         Country = country;
         Director = director;
         FilmVideoLink = filmVideoLink;
@@ -31,7 +31,7 @@ public class Film
     public string Title { get; private set; }
     public string? Description { get; private set; }
     public int Views { get; private set; }
-    public Rating Rating { get; set; }
+    public RatingObject RatingObject { get; set; }
     public int? Year{ get; private set; }
     public IReadOnlyCollection<Genre> Genres  => _genres;
     public string? Country { get; private set;}
@@ -131,14 +131,14 @@ public class Film
         return Result.Success();
     } 
     
-    public Result AddVote(int ratingValue)
+    public Result AddRate(int ratingValue)
     {
-        var result = Rating.AddVote(ratingValue);
+        var result = RatingObject.AddRate(ratingValue);
         if (result.IsFailure)
         {
             return result;
         }
-        Rating = result.Value;
+        RatingObject = result.Value;
         return Result.Success();
     }
     

@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace FilmLib.API.Contracts.Film;
 
-public class FilmRequest
+public class FilmCreateRequest
 {
     [FromForm(Name = "titleImage")]
     public IFormFile? TitleImage { get; set; }

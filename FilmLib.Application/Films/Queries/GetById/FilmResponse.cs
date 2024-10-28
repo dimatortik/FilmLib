@@ -10,7 +10,7 @@ public class FilmResponse
     public string Title { get; set; }
     public string? Description { get; set; }
     public int Views { get; set; }
-    public double Rating { get; set; }
+    public decimal Rating { get; set; }
     public int? Year{ get; set; }
     public string? Country { get;  set;}
     public string? Director { get;  set;}

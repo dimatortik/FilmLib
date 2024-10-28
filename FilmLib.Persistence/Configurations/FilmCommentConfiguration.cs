@@ -13,5 +13,6 @@ public class FilmCommentConfiguration : IEntityTypeConfiguration<FilmComment>
             .IsRequired()
             .HasMaxLength(FilmComment.MAX_FILM_COMMENT_LENGTH);
         builder.HasOne(c => c.User);
+        builder.HasOne(c => c.Film);
     }
 }

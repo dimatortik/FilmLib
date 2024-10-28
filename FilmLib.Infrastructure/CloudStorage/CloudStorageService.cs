@@ -1,6 +1,7 @@
 using Amazon.S3;
 using Amazon.S3.Model;
 using CSharpFunctionalExtensions;
+using FilmLib.Application.Interfaces;
 using Microsoft.AspNetCore.Http;
 
 namespace FilmLib.Infrastructure.CloudStorage;
@@ -11,7 +12,7 @@ public class CloudStorageService(IAmazonS3 s3Client) : ICloudStorageService
     public async Task<Result<string>> UploadFileAsync(IFormFile file, string keyName)
     {
         if (file == null)
-            return Result.Success(string.Empty);
+            return Result.Failure<string>(string.Empty);
         
         if (s3Client == null)
         {
@@ -50,8 +51,6 @@ public class CloudStorageService(IAmazonS3 s3Client) : ICloudStorageService
         {
             return Result.Failure<string>($"Failed to upload file.\n{response.ResponseMetadata.Metadata}");
         }
-        
-        
         
         return Result.Success($"https://{_bucketName}.fra1.digitaloceanspaces.com/{filepath}/{key}");
     }
@@ -95,24 +94,4 @@ public class CloudStorageService(IAmazonS3 s3Client) : ICloudStorageService
         }
         return true;
     }
-    
-    public async Task<Result<bool>> DeleteFileAsync(string keyName)
-    {
-        try
-        {
-            var deleteRequest = new DeleteObjectRequest
-            {
-                BucketName = _bucketName,
-                Key = keyName
-            };
-
-            var response = await s3Client.DeleteObjectAsync(deleteRequest);
-
-            return response.HttpStatusCode == System.Net.HttpStatusCode.NoContent;
-        }
-        catch (AmazonS3Exception e)
-        {
-            return false;
-        }
-    } 
 }
